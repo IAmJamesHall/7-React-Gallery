@@ -24,7 +24,7 @@ function Results({images}) {
     // )
 
     return (
-        <div className="photo-container"></div>
+        <div className="photo-container">
             <h2>Results</h2>
             <PhotoGrid photos={images} />
         </div>

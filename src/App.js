@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { parseString } from 'xml2js';
+import {
+  BrowserRouter,
+  Route,
+  Switch
+} from 'react-router-dom';
 
 import './App.css';
 
@@ -14,15 +19,19 @@ import Results from './components/Results';
 
 class App extends Component {
   state = {
-    images: ['https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150'],
+    images: ['https://via.placeholder.com/220',
+    './loading.gif',
+    'https://via.placeholder.com/220',
+    'https://via.placeholder.com/220'],
     searchText: "tree"
   };
 
+  loading = ['./loading.gif','./loading.gif','./loading.gif','./loading.gif'];
+
+
   getImages = () => {
-    
+    this.setState({images: this.loading})
+
     const url = 'https://www.flickr.com/services/rest/';
     axios.get(`${url}` + 
               `?method=flickr.photos.search` +
@@ -64,17 +73,19 @@ class App extends Component {
 
 
 
-  
 
 
   render() {
-    this.getImages();
+    
     return (
+      <BrowserRouter>
       <div className="container">
         <Search />
         <Nav />
+        
         <Results images={this.state.images} />
       </div>
+      </BrowserRouter>
     )
   }
 }
