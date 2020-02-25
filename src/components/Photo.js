@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Photo() {
+function Photo({url}) {
     return (
         <li>
-            <img src="https://via.placeholder.com/150"></img>
+            <img src={`${url}`}></img>
         </li>
     );
 }
