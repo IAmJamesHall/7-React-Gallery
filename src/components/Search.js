@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 
 class Search extends Component {
-    state = {
-        searchText: ""
-    }
 
-    submitForm = e => {
+    handleSubmit = e => {
         e.preventDefault();
-        this.setState({searchText: this.input.value})
-        const path = `search/${this.input.value}`
-        this.props.history.push(path);
+        this.props.handleSubmit(this.input.value);
     }
 
     render() {
         return (
-            <form className="search-form" onSubmit={this.submitForm}>
+            <form className="search-form" onSubmit={this.handleSubmit}>
                 <input type="search" name="search" placeholder="Search" required ref={ (input) => this.input = input} />
                 <button type="submit" className="search-button">
                     <svg fill="#fff" height="24" viewBox="0 0 23 23" width="24" xmlns="http://www.w3.org/2000/svg">
