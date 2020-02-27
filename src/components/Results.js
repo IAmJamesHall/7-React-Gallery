@@ -1,34 +1,53 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PhotoGrid from './PhotoGrid';
 import NoPhoto from './NoPhoto';
 
-function Results({images}) {
-    // return (
-    //     <div className="photo-container">
-    //     <h2>Results</h2>
-    //     <ul>
-    //       <li>
-    //         <img src="https://farm5.staticflickr.com/4334/37032996241_4c16a9b530.jpg" alt="" />
-    //       </li>
-    //       <li>
-    //         <img src="https://farm5.staticflickr.com/4342/36338751244_316b6ee54b.jpg" alt="" />
-    //       </li>
-    //       <li>
-    //         <img src="https://farm5.staticflickr.com/4343/37175099045_0d3a249629.jpg" alt="" />
-    //       </li>
-    //       <li>
-    //         <img src="https://farm5.staticflickr.com/4425/36337012384_ba3365621e.jpg" alt="" />
-    //       </li>
-    //     </ul>
-    //   </div>
-    // )
+class Results extends Component {
+    state = {
+        query: "",
+        isLoading: true
+    };
 
-    return (
-        <div className="photo-container">
-            <h2>Results</h2>
-            <PhotoGrid photos={images} />
-        </div>
-    )
+    // previous (semi-working) solution
+    // getQuery() {
+    //     const query = this.props.match.params.query;
+    //     this.setState({query}, () => {
+    //         this.props.setSearchText(query, this.props.getImages)
+    //         this.props.getImages(query);
+    //     })
+    // }
+
+    // shouldComponentUpdate(nextProps) {
+    //     const query = nextProps.match.params.query;
+    //     return (this.state.query !== query);
+    // }
+
+    getQuery = async () => {
+        this.setState({isLoading: true});
+        const { query } = this.props.props.match.params;
+        await this.props.searchForQuery(query);
+        this.setState({query, isLoading: false});
+    }
+
+
+    componentDidMount() {
+        this.getQuery().then((res)=>console.log('yoyo: ', res));
+    }
+
+     render() {
+         if (this.state.isLoading === true) {
+             return (<h3>Loading...</h3>);
+         } else {
+            return (
+                <div className="photo-container">
+                    <h2>Results: {this.state.query} </h2>
+                    <PhotoGrid photos={this.props.imageURLs} />
+                </div>
+            )
+         }
+        
+    }
+
 }
 
 export default Results;

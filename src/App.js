@@ -61,28 +61,40 @@ class App extends Component {
         })
       })
       .catch(error => {
-        // handle error
-        console.log(error);
+        console.log('ERROR: ', error);
       })
   }
 
   setSearchText = (query) => {
     this.setState(prevState => ({
       searchText: query
-    }), () => this.getImages())
+    }))
   }
+
+  searchForQuery = async (query) => {
+    await this.setSearchText(query);
+    await this.getImages();
+}
+
 
 
   render() {
     return (
       <BrowserRouter>
-      <div className="container">
-        <Search handleSubmit={this.setSearchText}/>
-        <Nav />
-        <Route path="/search/:query" 
-               render={() => <Results images={this.state.images} /> } />
-        
-      </div>
+        <div className="container">
+          <Search handleSubmit={this.setSearchText} />
+          <Nav />
+          <Route path="/search/:query"
+            render={props => (
+                <Results
+                  props={{ ...props }}
+                  searchForQuery={this.searchForQuery}
+                  imageURLs={this.state.images}
+                />
+              )
+            }
+          />
+        </div>
       </BrowserRouter>
     )
   }
