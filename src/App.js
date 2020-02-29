@@ -18,13 +18,13 @@ import Results from './components/Results';
 
 
 class App extends Component {
-  loading = ['./loading.gif','./loading.gif','./loading.gif','./loading.gif'];
+  loading = ['./loading.gif', './loading.gif', './loading.gif', './loading.gif'];
   state = {
     images: this.loading,
     searchText: "tree"
   };
 
- 
+
 
   getImages = () => {
     const url = 'https://www.flickr.com/services/rest/';
@@ -74,7 +74,7 @@ class App extends Component {
   searchForQuery = async (query) => {
     await this.setSearchText(query);
     await this.getImages();
-}
+  }
 
 
 
@@ -86,12 +86,12 @@ class App extends Component {
           <Nav />
           <Route path="/search/:query"
             render={props => (
-                <Results
-                  props={{ ...props }}
-                  searchForQuery={this.searchForQuery}
-                  imageURLs={this.state.images}
-                />
-              )
+              <Results
+                props={{ ...props }}
+                searchForQuery={this.searchForQuery}
+                imageURLs={this.state.images}
+              />
+            )
             }
           />
         </div>
