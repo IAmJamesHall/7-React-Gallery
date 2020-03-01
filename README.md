@@ -1,6 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+
+# React Gallery App
+## TODO
+- add customizations
+- move fetch logic back into App.js
+
+## Available Scripts (create-react-app)
 
 In the project directory, you can run:
 
