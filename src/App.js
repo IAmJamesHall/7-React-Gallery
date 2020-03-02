@@ -62,6 +62,10 @@ class App extends Component {
         console.log('ERROR: ', error);
       })
   }
+
+  setQuery = (query) => {
+    this.setState({query});
+  }
   
 
 
@@ -75,9 +79,10 @@ class App extends Component {
             render={props => (
             <Results 
               match={props.match}
-              imgURLs={this.state.images}
+              images={this.state.images}
               query={this.state.query}
               getImages={this.getImages}
+              setQuery={this.setQuery}
             />)}
           />
         </div>
