@@ -11,7 +11,7 @@ class Results extends Component {
     query: "",
     isLoading: true,
     isFirstLoad: true,
-    images: ['./loading.gif', './loading.gif', './loading.gif', './loading.gif']
+    images: ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif']
   };
 
   getImages = () => {
@@ -56,14 +56,14 @@ class Results extends Component {
 
   getQuery = async () => {
     this.setState({ isLoading: true });
-    const { query } = this.props.props.match.params;
+    const { query } = this.props.match.params;
     await this.setState({ query });
     await this.getImages();
     this.setState({ isLoading: false });
   }
 
   render() {
-    const { query } = this.props.props.match.params;
+    const { query } = this.props.match.params;
     if (query != this.state.query) {
       this.getQuery().then( res => console.log('yoyo: ', res));
     }

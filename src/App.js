@@ -23,6 +23,7 @@ class App extends Component {
     images: this.loading
     // searchText: "tree"
   };
+  
 
 
   render() {
@@ -32,7 +33,7 @@ class App extends Component {
           <Search handleSubmit={this.setSearchText} />
           <Nav />
           <Route path="/search/:query"
-            render={props => (<Results props={{ ...props }} />)}
+            render={props => (<Results match={props.match} />)}
           />
         </div>
       </BrowserRouter>

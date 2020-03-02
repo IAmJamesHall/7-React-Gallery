@@ -3,8 +3,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # React Gallery App
 ## TODO
-- add customizations
 - move fetch logic back into App.js
+- add customizations
+
+
+
+
+
 
 ## Available Scripts (create-react-app)
 
