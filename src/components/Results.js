@@ -1,43 +1,34 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { parseString } from 'xml2js';
+import React, { useState, useEffect } from 'react';
 import PhotoGrid from './PhotoGrid';
 
 import NoPhoto from './NoPhoto';
-import apiKey from '../config';
 
-class Results extends Component {
-  state = {
-    isLoading: true
-  };
+const Results = props => {
 
-  
+  // const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const urlQuery = props.match.params.query;
+    if (urlQuery != props.query) {
+      getQuery(urlQuery).then(res => console.log('yoyo: ', res));
+    }
+  });
 
-  getQuery = async () => {
-    this.setState({ isLoading: true });
-    const { query } = this.props.match.params;
-    await this.props.getImages();
-    this.setState({ isLoading: false });
+  const getQuery = async (query) => {
+    // setIsLoading(true);
+    await props.setQuery(query)
+    await props.getImages();
+    document.title = `${query} | React Gallery App`
+    // setIsLoading(false);
   }
 
-  render() {
-    const urlQuery = this.props.match.params.query;
-    if (urlQuery != this.props.query) {
-      this.getQuery().then( res => console.log('yoyo: ', res));
-    }
-    
-    if (this.state.isLoading === true) {
-      return (<h3>Loading...</h3>);
-    } else {
-      return (
-        <div className="photo-container">
-          <h2>Results: {this.props.query} </h2>
-          <PhotoGrid photos={this.props.imgURLs} />
-        </div>
-      )
-    }
-  }
+
+  return (
+    <div className="photo-container">
+      <h2>Results: {props.query} </h2>
+      <PhotoGrid photos={props.images} />
+    </div>
+  )
 }
 
 export default Results;
