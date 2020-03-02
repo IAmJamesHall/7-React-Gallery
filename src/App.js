@@ -18,11 +18,50 @@ import Results from './components/Results';
 
 
 class App extends Component {
-  loading = ['./loading.gif', './loading.gif', './loading.gif', './loading.gif'];
+  loading = ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif'];
   state = {
-    images: this.loading
-    // searchText: "tree"
+    images: this.loading,
+    query: "tree"
   };
+
+  getImages = () => {
+    const url = 'https://www.flickr.com/services/rest/';
+    axios.get(`${url}` +
+      `?method=flickr.photos.search` +
+      `&api_key=${apiKey}` +
+      `&text=${this.state.query}` +
+      `&per_page=24`)
+      .then(response => {
+        let images;
+        parseString(response.data, (err, parsed) => {
+          images = parsed.rsp.photos[0].photo;
+        })
+        return images;
+      })
+      .then(photos => {
+        const imageURLs = [];
+        for (let i = 0; i < photos.length; i++) {
+          const {
+            farm,
+            id,
+            server,
+            secret
+          } = photos[i].$;
+
+          const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
+          imageURLs.push(url);
+        }
+        return imageURLs;
+      })
+      .then(imageURLs => {
+        this.setState({
+          images: imageURLs
+        })
+      })
+      .catch(error => {
+        console.log('ERROR: ', error);
+      })
+  }
   
 
 
@@ -33,7 +72,13 @@ class App extends Component {
           <Search handleSubmit={this.setSearchText} />
           <Nav />
           <Route path="/search/:query"
-            render={props => (<Results match={props.match} />)}
+            render={props => (
+            <Results 
+              match={props.match}
+              imgURLs={this.state.images}
+              query={this.state.query}
+              getImages={this.getImages}
+            />)}
           />
         </div>
       </BrowserRouter>
