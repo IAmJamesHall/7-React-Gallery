@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { parseString } from 'xml2js';
+import { parseString } from 'xml2js'; //used for parsing xml response from flickr
 import {
   BrowserRouter,
   Route,
-  Switch
+  Switch,
+  Redirect
 } from 'react-router-dom';
 
-import './App.css';
+import './App.css'; //app styling
 
-import apiKey from './config';
+import apiKey from './config'; //flickr key
 
 // Components
 import Search from './components/Search';
@@ -19,14 +20,18 @@ import ErrorPage from './components/ErrorPage';
 
 
 class App extends Component {
-  loading = ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif'];
   state = {
     images: [],
-    query: "tree"
+    query: ""
   };
 
+
+  //main data fetching function
   getImages = () => {
+    // reset image state
     this.setState({images: []});
+
+    fetch data from flickr
     const url = 'https://www.flickr.com/services/rest/';
     axios.get(`${url}` +
       `?method=flickr.photos.search` +
@@ -34,6 +39,7 @@ class App extends Component {
       `&text=${this.state.query}` +
       `&per_page=24`)
       .then(response => {
+        // strip out unneeded info from response
         let images;
         parseString(response.data, (err, parsed) => {
           images = parsed.rsp.photos[0].photo;
@@ -41,6 +47,8 @@ class App extends Component {
         return images;
       })
       .then(photos => {
+
+        //extract data from response and construct URLs
         const imageURLs = [];
         if (photos) {
           for (let i = 0; i < photos.length; i++) {
@@ -60,6 +68,7 @@ class App extends Component {
         }
       })
       .then(imageURLs => {
+        // set imageURLs to state
         this.setState({
           images: imageURLs
         })
@@ -69,6 +78,7 @@ class App extends Component {
       })
   }
 
+  // helper function; called from child component
   setQuery = (query) => {
     this.setState({query});
   }
@@ -82,6 +92,8 @@ class App extends Component {
           <Search handleSubmit={this.setSearchText} />
           <Nav />
           <Switch>
+            {/* if on home page, redirect to a results page*/}
+            <Route exact path="/" render={ () => <Redirect to={'/search/water'} />}/>
           <Route path="/search/:query"
             render={props => (
             <Results 
