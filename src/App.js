@@ -31,7 +31,7 @@ class App extends Component {
     // reset image state
     this.setState({images: []});
 
-    fetch data from flickr
+    //fetch data from flickr
     const url = 'https://www.flickr.com/services/rest/';
     axios.get(`${url}` +
       `?method=flickr.photos.search` +
