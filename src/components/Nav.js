@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
+/* quick nav links for easy searching */
 function Nav() {
   return (
     <nav className="main-nav">
       <ul>
-        <li><Link to='/search/cats'>Cats</Link></li>
-        <li><Link to='/search/dogs'>Dogs</Link></li>
-        <li><Link to='/search/computers'>Computers</Link></li>
+        <li><NavLink to='/search/water'>Water</NavLink></li>
+        <li><NavLink to='/search/sand'>Sand</NavLink></li>
+        <li><NavLink to='/search/eggs'>Eggs</NavLink></li>
       </ul>
     </nav>
   )

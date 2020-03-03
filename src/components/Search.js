@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 class Search extends Component {
 
+  // on submit, change url path
   handleSubmit = e => {
     e.preventDefault();
     const path = `/search/${this.input.value}`;
