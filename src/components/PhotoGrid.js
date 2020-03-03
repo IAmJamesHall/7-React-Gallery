@@ -1,17 +1,20 @@
 import React from 'react';
 
-// Component
 import Photo from './Photo';
 
-
-/* returns grid of photos */
-function PhotoGrid({photos, query}) {
+function PhotoGrid({photos}) {
     let photoElements = [];
     for (let i = 0; i < photos.length; i++) {
-        photoElements.push(<Photo url={photos[i]} alt={query} key={i} />);
+        photoElements.push(<Photo url={photos[i]} key={i} />);
     }
 
-    return (<ul>{photoElements}</ul>);
+    return (
+        
+            <ul>
+                {photoElements}
+            </ul>
+        
+    )
 }
 
 export default PhotoGrid;

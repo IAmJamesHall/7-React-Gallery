@@ -1,37 +1,30 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { parseString } from 'xml2js'; //used for parsing xml response from flickr
+import { parseString } from 'xml2js';
 import {
   BrowserRouter,
   Route,
-  Switch,
-  Redirect
+  Switch
 } from 'react-router-dom';
 
-import './App.css'; //app styling
+import './App.css';
 
-import apiKey from './config'; //flickr key
+import apiKey from './config';
 
 // Components
 import Search from './components/Search';
 import Nav from './components/Nav';
 import Results from './components/Results';
-import ErrorPage from './components/ErrorPage';
 
 
 class App extends Component {
+  loading = ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif'];
   state = {
-    images: [],
-    query: ""
+    images: this.loading,
+    query: "tree"
   };
 
-
-  //main data fetching function
   getImages = () => {
-    // reset image state
-    this.setState({images: []});
-
-    //fetch data from flickr
     const url = 'https://www.flickr.com/services/rest/';
     axios.get(`${url}` +
       `?method=flickr.photos.search` +
@@ -39,7 +32,6 @@ class App extends Component {
       `&text=${this.state.query}` +
       `&per_page=24`)
       .then(response => {
-        // strip out unneeded info from response
         let images;
         parseString(response.data, (err, parsed) => {
           images = parsed.rsp.photos[0].photo;
@@ -47,28 +39,21 @@ class App extends Component {
         return images;
       })
       .then(photos => {
-
-        //extract data from response and construct URLs
         const imageURLs = [];
-        if (photos) {
-          for (let i = 0; i < photos.length; i++) {
-            const {
-              farm,
-              id,
-              server,
-              secret
-            } = photos[i].$;
+        for (let i = 0; i < photos.length; i++) {
+          const {
+            farm,
+            id,
+            server,
+            secret
+          } = photos[i].$;
 
-            const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
-            imageURLs.push(url);
-          }
-          return imageURLs;
-        } else {
-          return [];
+          const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
+          imageURLs.push(url);
         }
+        return imageURLs;
       })
       .then(imageURLs => {
-        // set imageURLs to state
         this.setState({
           images: imageURLs
         })
@@ -78,7 +63,6 @@ class App extends Component {
       })
   }
 
-  // helper function; called from child component
   setQuery = (query) => {
     this.setState({query});
   }
@@ -91,9 +75,6 @@ class App extends Component {
         <div className="container">
           <Search handleSubmit={this.setSearchText} />
           <Nav />
-          <Switch>
-            {/* if on home page, redirect to a results page*/}
-            <Route exact path="/" render={ () => <Redirect to={'/search/water'} />}/>
           <Route path="/search/:query"
             render={props => (
             <Results 
@@ -104,8 +85,6 @@ class App extends Component {
               setQuery={this.setQuery}
             />)}
           />
-          <Route path="/" component={ErrorPage} />
-          </Switch>
         </div>
       </BrowserRouter>
     )

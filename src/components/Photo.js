@@ -1,10 +1,9 @@
 import React from 'react';
 
-/* returns <li> with an image */
-function Photo({ url, alt }) {
+function Photo({ url }) {
   return (
     <li>
-      <img src={`${url}`} alt={`${alt}`}></img>
+      <img src={`${url}`}></img>
     </li>
   );
 }

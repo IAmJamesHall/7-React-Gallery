@@ -1,43 +1,34 @@
-import React, { useEffect } from 'react';
-
-// Components
+import React, { useState, useEffect } from 'react';
 import PhotoGrid from './PhotoGrid';
+
 import NoPhoto from './NoPhoto';
 
-/* returns grid of photos based on route in props */
 const Results = props => {
 
-  /*  run after render()
-      checks if there is a new url
-      if so, runs getQuery()  */
+  // const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const urlQuery = props.match.params.query;
-    if (urlQuery !== props.query) {
+    if (urlQuery != props.query) {
       getQuery(urlQuery).then(res => console.log('yoyo: ', res));
     }
   });
 
-  // sets query state in App, then runs fetching function
   const getQuery = async (query) => {
+    // setIsLoading(true);
     await props.setQuery(query)
     await props.getImages();
-
-    // set document title
     document.title = `${query} | React Gallery App`
+    // setIsLoading(false);
   }
 
 
-  if (props.images.length > 0) { //if images were returned
-    return (
-      <div className="photo-container">
-        <h2>Results: {props.query} </h2>
-        <PhotoGrid photos={props.images} query={props.query}/>
-      </div>
-    )
-  } else { //no images returned
-    return <NoPhoto />;
-  }
-
+  return (
+    <div className="photo-container">
+      <h2>Results: {props.query} </h2>
+      <PhotoGrid photos={props.images} />
+    </div>
+  )
 }
 
 export default Results;
