@@ -4,9 +4,6 @@ import PhotoGrid from './PhotoGrid';
 import NoPhoto from './NoPhoto';
 
 const Results = props => {
-
-  // const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const urlQuery = props.match.params.query;
     if (urlQuery != props.query) {
@@ -15,20 +12,23 @@ const Results = props => {
   });
 
   const getQuery = async (query) => {
-    // setIsLoading(true);
     await props.setQuery(query)
     await props.getImages();
     document.title = `${query} | React Gallery App`
-    // setIsLoading(false);
   }
 
 
-  return (
-    <div className="photo-container">
-      <h2>Results: {props.query} </h2>
-      <PhotoGrid photos={props.images} />
-    </div>
-  )
+  if (props.images.length > 0) {
+    return (
+      <div className="photo-container">
+        <h2>Results: {props.query} </h2>
+        <PhotoGrid photos={props.images} />
+      </div>
+    )
+  } else {
+    return <NoPhoto />;
+  }
+
 }
 
 export default Results;

@@ -15,16 +15,18 @@ import apiKey from './config';
 import Search from './components/Search';
 import Nav from './components/Nav';
 import Results from './components/Results';
+import ErrorPage from './components/ErrorPage';
 
 
 class App extends Component {
   loading = ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif'];
   state = {
-    images: this.loading,
+    images: [],
     query: "tree"
   };
 
   getImages = () => {
+    this.setState({images: []});
     const url = 'https://www.flickr.com/services/rest/';
     axios.get(`${url}` +
       `?method=flickr.photos.search` +
@@ -40,18 +42,22 @@ class App extends Component {
       })
       .then(photos => {
         const imageURLs = [];
-        for (let i = 0; i < photos.length; i++) {
-          const {
-            farm,
-            id,
-            server,
-            secret
-          } = photos[i].$;
+        if (photos) {
+          for (let i = 0; i < photos.length; i++) {
+            const {
+              farm,
+              id,
+              server,
+              secret
+            } = photos[i].$;
 
-          const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
-          imageURLs.push(url);
+            const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
+            imageURLs.push(url);
+          }
+          return imageURLs;
+        } else {
+          return [];
         }
-        return imageURLs;
       })
       .then(imageURLs => {
         this.setState({
@@ -75,6 +81,7 @@ class App extends Component {
         <div className="container">
           <Search handleSubmit={this.setSearchText} />
           <Nav />
+          <Switch>
           <Route path="/search/:query"
             render={props => (
             <Results 
@@ -85,6 +92,8 @@ class App extends Component {
               setQuery={this.setQuery}
             />)}
           />
+          <Route path="/" component={ErrorPage} />
+          </Switch>
         </div>
       </BrowserRouter>
     )
