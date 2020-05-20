@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { parseString } from 'xml2js';
 import {
-  BrowserRouter,
+  HashRouter,
   Route,
   Switch
 } from 'react-router-dom';
@@ -71,7 +71,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter basename='/'>
         <div className="container">
           <Search handleSubmit={this.setSearchText} />
           <Nav />
@@ -86,7 +86,7 @@ class App extends Component {
             />)}
           />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }

@@ -1,15 +1,13 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-
 # React Gallery App
-## TODO
-- move fetch logic back into App.js
-- add customizations
 
+## Features
 
+- using flickr, fetch images related to a query
+- use react router to control logic
+- allow text searches
+- the title is updated to the search query
 
-
-
+# create-react-app stuff
 
 ## Available Scripts (create-react-app)
 
