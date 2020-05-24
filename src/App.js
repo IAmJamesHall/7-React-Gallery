@@ -1,93 +1,91 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { parseString } from 'xml2js';
-import {
-  HashRouter,
-  Route,
-  Switch
-} from 'react-router-dom';
+import React, { Component } from "react";
+import axios from "axios";
+import { parseString } from "xml2js";
+import { HashRouter, Route } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
 
-import apiKey from './config';
+import apiKey from "./config";
 
 // Components
-import Search from './components/Search';
-import Nav from './components/Nav';
-import Results from './components/Results';
-
+import Search from "./components/Search";
+import Nav from "./components/Nav";
+import Results from "./components/Results";
 
 class App extends Component {
-  loading = ['../loading.gif', '../loading.gif', '../loading.gif', '../loading.gif'];
+  loading = [
+    "../loading.gif",
+    "../loading.gif",
+    "../loading.gif",
+    "../loading.gif",
+  ];
   state = {
     images: this.loading,
-    query: "tree"
+    query: "tree",
   };
 
   getImages = () => {
-    const url = 'https://www.flickr.com/services/rest/';
-    axios.get(`${url}` +
-      `?method=flickr.photos.search` +
-      `&api_key=${apiKey}` +
-      `&text=${this.state.query}` +
-      `&per_page=24`)
-      .then(response => {
+    const url = "https://www.flickr.com/services/rest/";
+    axios
+      .get(
+        `${url}` +
+          `?method=flickr.photos.search` +
+          `&api_key=${apiKey}` +
+          `&text=${this.state.query}` +
+          `&per_page=24`
+      )
+      .then((response) => {
         let images;
         parseString(response.data, (err, parsed) => {
           images = parsed.rsp.photos[0].photo;
-        })
+        });
         return images;
       })
-      .then(photos => {
+      .then((photos) => {
         const imageURLs = [];
         for (let i = 0; i < photos.length; i++) {
-          const {
-            farm,
-            id,
-            server,
-            secret
-          } = photos[i].$;
+          const { farm, id, server, secret } = photos[i].$;
 
-          const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`
+          const url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
           imageURLs.push(url);
         }
         return imageURLs;
       })
-      .then(imageURLs => {
+      .then((imageURLs) => {
         this.setState({
-          images: imageURLs
-        })
+          images: imageURLs,
+        });
       })
-      .catch(error => {
-        console.log('ERROR: ', error);
-      })
-  }
+      .catch((error) => {
+        console.log("ERROR: ", error);
+      });
+  };
 
   setQuery = (query) => {
-    this.setState({query});
-  }
-  
-
+    this.setState({ query });
+  };
 
   render() {
     return (
-      <HashRouter basename='/'>
+      <HashRouter basename="/">
         <div className="container">
           <Search handleSubmit={this.setSearchText} />
           <Nav />
-          <Route path="/search/:query"
-            render={props => (
-            <Results 
-              match={props.match}
-              images={this.state.images}
-              query={this.state.query}
-              getImages={this.getImages}
-              setQuery={this.setQuery}
-            />)}
+          <Route
+            path="/search/:query"
+            render={(props) => (
+              <Results
+                match={props.match}
+                images={this.state.images}
+                query={this.state.query}
+                getImages={this.getImages}
+                setQuery={this.setQuery}
+              />
+            )}
           />
         </div>
       </HashRouter>
-    )
+    );
   }
 }
 

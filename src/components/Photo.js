@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 function Photo({ url }) {
   return (
     <li>
-      <img src={`${url}`}></img>
+      <img src={`${url}`} alt=""></img>
     </li>
   );
 }
